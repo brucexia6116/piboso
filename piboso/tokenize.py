@@ -20,20 +20,18 @@ from piboso.corpora import NewDocuments
 import multiprocessing as mp
 
 
-def tokenize(ds, features, store_path, fallback_path=None):
+def tokenize(ds, features, store_path):
   """
   Compute feature values and save them in a hydrat store.
 
   @param ds dataset to read from
   @param features names of features to read
   @param store_path path of store to write to
-  @param fallback_path path of store to read feature spaces from
   """
   class_space = 'ebmcat'
-  fallback = Store(fallback_path) if fallback_path is not None else None
 
   #print >>sys.stderr,  "=== opening store at {0} ===".format(store_path)
-  with closing(Store(store_path, 'a', fallback=fallback, recursive_close=False)) as store:
+  with closing(Store(store_path, 'a')) as store:
 
     print >>sys.stderr,  "=== inducing features ({0}) ===".format(features)
     # Induce all the features for the new test data
@@ -46,20 +44,18 @@ def tokenize(ds, features, store_path, fallback_path=None):
 # This is split in two as some of the features were not declared
 # in the dataset layer, and so need to be induced using an external
 # tokenize call.
-def tokenize_extra(ds, store_path, fallback_path=None):
+def tokenize_extra(ds, store_path):
   """
   Additional feature extraction for features that are not provided by the dataset
   implementation.
 
   @param ds dataset to read from
   @param store_path path of store to write to
-  @param fallback_path path of store to read feature spaces from
   """
   class_space = 'ebmcat'
-  fallback = Store(fallback_path) if fallback_path is not None else None
 
   print >>sys.stderr,  "=== tokenize_extra for {0} ===".format(store_path)
-  with closing(Store(store_path, 'a', fallback=fallback, recursive_close=False)) as store:
+  with closing(Store(store_path, 'a', recursive_close=False)) as store:
     proxy = DataProxy(ds, store=store)
 
     proxy.tokenstream_name = 'treetaggerlemmapos'
@@ -69,7 +65,7 @@ def tokenize_extra(ds, store_path, fallback_path=None):
     proxy.tokenize(ext.bigram)
     proxy.tokenize(ext.trigram)
     
-def induce(chunk, store_path, fallback_path, features):
+def induce(chunk, store_path, features, spaces):
   """
   Induce features for a list of abstracts.
 
@@ -82,13 +78,11 @@ def induce(chunk, store_path, fallback_path, features):
       ts[docid] = line
   ds = NewDocuments(ts)
 
-  # Merge in spaces from the fallback
-  store = Store(store_path, 'a')
-  feats = Store(fallback_path, 'r')
-  store.merge(feats, do_spaces=True, do_datasets=False, do_tasksets=False, do_results=False)
-
-  store.close()
-  feats.close()
+  # Merge feature spaces into the store
+  with closing(Store(store_path, 'a')) as store:
+    for space in spaces:
+      md = {'name':space, 'type':'feature'}
+      store.add_Space(spaces[space], md)
 
   # We do the feature induction in a subprocess to avoid Python holding on to memory.
   for feature in features:
@@ -140,6 +134,7 @@ def process_tarfile(data_path, feat_name, output_dir, fallback_path, parts=None,
       store_path = os.path.join(output_dir, '{0}.features.{1}.h5'.format(chunk_id, feat_name)) 
       
       print >>sys.stderr, "==== processing Part {0} ({1} files) ====".format(chunk_id, len(chunk))
+      raise NotImplementedError("need to update this to pass spaces rather than fallback path")
       induce(chunk, store_path, fallback_path, features)
 
       files_processed += len(chunk)

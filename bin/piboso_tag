@@ -8,10 +8,15 @@ Marco Lui, March 2013
 import argparse, sys, os
 import csv
 import tempfile
+import bz2
 
 from cPickle import load
 
 from hydrat.store import Store
+
+# Disable hydrat's progressbar output
+import hydrat.common.pb as pb
+pb.ENABLED = False
 
 from piboso.tokenize import induce
 from piboso.common import Timer
@@ -25,7 +30,6 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("abstracts", metavar="FILE", help="do PIBOSO tagging for FILE (can specify multiple)", nargs='+')
   parser.add_argument("--model","-m", help="read model from")
-  parser.add_argument("--feat","-f", help="read feature data from")
   parser.add_argument("--output","-o", type=argparse.FileType('w'), metavar="FILE", default=sys.stdout, help="output to FILE (default stdout)")
   args = parser.parse_args()
 
@@ -34,10 +38,14 @@ if __name__ == "__main__":
   handle, store_path = tempfile.mkstemp()
   os.close(handle)
 
-  features, L0_cl, L1_cl = load(open(args.model))
+  with bz2.BZ2File(args.model) as model_f, Timer() as t:
+    print >>sys.stderr, "unpacking model from:", args.model
+    features, spaces, L0_cl, L1_cl = load(model_f)
+    print >>sys.stderr, "unpacking took {0:.2f}s".format(t.elapsed)
+
   # induce all the features for the new documents
   # fallback_path and features should come from the pre-trained model
-  induce(chunk, store_path, args.feat, features)
+  induce(chunk, store_path, features, spaces)
 
   #fallback = Store(args.feat, 'r')
   #store = Store(store_path, 'r', fallback=fallback)

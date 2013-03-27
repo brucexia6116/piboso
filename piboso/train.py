@@ -37,6 +37,10 @@ if __name__ == "__main__":
   l = repeat.RepeatLearner(liblinear.liblinearL(svm_type=0, output_probability=True))
   store = Store(args.feat_store, 'r') # TODO: Do we want this read-only?
 
+  for feature in features:
+    spaces[feature] = store.get_Space(feature)
+  spaces['ebmcat'] = store.get_Space('ebmcat')
+
   proxy = DataProxy(ALTA2012Full(), store=store)
   proxy.class_space = class_space
   
@@ -64,7 +68,7 @@ if __name__ == "__main__":
     L1_cl = l(L1_fv, L1_gs)
     print >>sys.stderr, "== training L1 took {0:.2f}s ==".format(L1_timer.elapsed)
 
-
-  with open(args.output, 'w') as out_f:
-    dump((features, L0_cl, L1_cl), out_f)
+  with bz2.BZ2File(args.output, 'w') as out_f:
+    model = features, spaces, L0_cl, L1_cl
+    dump(model, out_f)
     print >>sys.stderr, "== wrote model to {0} ==".format(args.output)
