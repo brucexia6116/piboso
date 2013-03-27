@@ -680,22 +680,11 @@ def is_heading(sent):
 class NewDocuments(ALTA2012Common):
   def __init__(self, records):
     super(ALTA2012Common, self).__init__()
-    self._data = None
-    self.records = records
+    self._data = {}
+    self._data['ts'] = records
 
   def _parse_data(self):
-    if self._data is None:
-      ts = {}
-
-      for f in self.records:
-          filename = os.path.basename(f.name)
-          part = os.path.basename(os.path.dirname(f.name))
-          for i, line in enumerate(f.readlines()):
-            docid = "{0}/{1}-{2}".format(part, filename, i+1)
-            ts[docid] = line
-
-      self._data = {}
-      self._data['ts'] = ts
+    pass
 
 if __name__ == "__main__":
   from collections import defaultdict, Counter
