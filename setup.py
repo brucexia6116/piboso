@@ -6,7 +6,7 @@ setup(
     author='Marco Lui',
     author_email='mhlui@unimelb.edu.au',
     packages=['piboso'],
-    scripts=[],
+    scripts=['bin/piboso_tag'],
     url='http://pypi.python.org/pypi/piboso/',
     license='LICENSE.txt',
     description='Sentence tagger for biomedical abstracts.',
