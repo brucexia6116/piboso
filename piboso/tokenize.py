@@ -33,7 +33,7 @@ def tokenize(ds, features, store_path):
   #print >>sys.stderr,  "=== opening store at {0} ===".format(store_path)
   with closing(Store(store_path, 'a')) as store:
 
-    print >>sys.stderr,  "=== inducing features ({0}) ===".format(features)
+    #print >>sys.stderr,  "=== inducing features ({0}) ===".format(features)
     # Induce all the features for the new test data
     proxy = DataProxy(ds, store=store)
     proxy.inducer.process(proxy.dataset, 
@@ -54,7 +54,7 @@ def tokenize_extra(ds, store_path):
   """
   class_space = 'ebmcat'
 
-  print >>sys.stderr,  "=== tokenize_extra for {0} ===".format(store_path)
+  #print >>sys.stderr,  "=== tokenize_extra for {0} ===".format(store_path)
   with closing(Store(store_path, 'a', recursive_close=False)) as store:
     proxy = DataProxy(ds, store=store)
 

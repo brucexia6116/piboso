@@ -6,6 +6,7 @@ setup(
     author='Marco Lui',
     author_email='mhlui@unimelb.edu.au',
     packages=['piboso'],
+    package_data={'piboso':['piboso/models/*']},
     scripts=['bin/piboso_tag'],
     url='http://pypi.python.org/pypi/piboso/',
     license='LICENSE.txt',
