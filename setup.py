@@ -1,4 +1,4 @@
-from setuptools import setup
+from distutils.core import setup
 
 setup(
     name='piboso',
@@ -6,7 +6,8 @@ setup(
     author='Marco Lui',
     author_email='mhlui@unimelb.edu.au',
     packages=['piboso'],
-    package_data={'piboso':['piboso/models/*']},
+    package_dir={'piboso':'piboso'},
+    package_data={'piboso':['models/*']},
     scripts=['bin/piboso_tag'],
     url='http://pypi.python.org/pypi/piboso/',
     license='LICENSE.txt',
