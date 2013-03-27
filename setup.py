@@ -7,7 +7,7 @@ setup(
     author_email='mhlui@unimelb.edu.au',
     packages=['piboso'],
     package_dir={'piboso':'piboso'},
-    package_data={'piboso':['models/*']},
+    package_data={'piboso':['models/*','data/stopword']},
     scripts=['bin/piboso_tag'],
     url='http://pypi.python.org/pypi/piboso/',
     license='LICENSE.txt',

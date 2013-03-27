@@ -86,15 +86,17 @@ def induce(chunk, store_path, features, spaces):
 
   # We do the feature induction in a subprocess to avoid Python holding on to memory.
   for feature in features:
-    p = mp.Process(target=tokenize, args=(ds, [feature], store_path))
-    p.start()
-    p.join()
-    p.terminate()
+    tokenize(ds, [feature], store_path)
+    #p = mp.Process(target=tokenize, args=(ds, [feature], store_path))
+    #p.start()
+    #p.join()
+    #p.terminate()
 
-  p = mp.Process(target=tokenize_extra, args=(ds, store_path))
-  p.start()
-  p.join()
-  p.terminate()
+  tokenize_extra(ds, store_path)
+  #p = mp.Process(target=tokenize_extra, args=(ds, store_path))
+  #p.start()
+  #p.join()
+  #p.terminate()
 
 def process_tarfile(data_path, feat_name, output_dir, fallback_path, parts=None, num_files=None):
   """
