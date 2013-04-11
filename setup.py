@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='piboso',
@@ -8,7 +8,6 @@ setup(
     packages=['piboso'],
     package_dir={'piboso':'piboso'},
     package_data={'piboso':['models/*','data/stopword']},
-    scripts=['bin/piboso_tag'],
     url='http://pypi.python.org/pypi/piboso/',
     license='LICENSE.txt',
     description='Sentence tagger for biomedical abstracts.',
@@ -17,4 +16,9 @@ setup(
         "hydrat >= 0.9.5",
         "nltk >= 2.0",
     ],
+    entry_points={
+        'console_scripts': [
+            'piboso = piboso.cli:main',
+        ],
+    },
 )

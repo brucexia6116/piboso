@@ -1,0 +1,4 @@
+* implement (semi-?) automatic installation of TreeTagger
+* implement output using logging
+* order output csv by int rather than str for row id
+* publish on github

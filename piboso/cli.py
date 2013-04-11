@@ -23,7 +23,7 @@ from piboso.config import load_config, write_blank_config, DEFAULT_CONFIG_FILE
 import numpy as np
 import scipy.sparse as sp
 
-if __name__ == "__main__":
+def main():
   # TODO: check temp is cleared
   # TODO: configurable tempdir
   # TODO: accept paths on STDIN
@@ -94,3 +94,6 @@ if __name__ == "__main__":
     print >>sys.stderr, "wrote output to:", args.output.name
 
     print >>sys.stderr, "completed in {0:.2f}s ({1:.2f} inst/s)".format(prog_timer.elapsed, prog_timer.rate(L0_preds.shape[0]))
+
+if __name__ == "__main__":
+  main()
