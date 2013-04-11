@@ -15,5 +15,6 @@ setup(
     long_description=open('README.txt').read(),
     install_requires=[
         "hydrat >= 0.9.5",
+        "nltk >= 2.0",
     ],
 )
