@@ -8,7 +8,7 @@ setup(
     packages=['piboso'],
     package_dir={'piboso':'piboso'},
     package_data={'piboso':['models/*','data/stopword']},
-    url='http://pypi.python.org/pypi/piboso/',
+    url='http://github.com/saffsd/piboso/',
     license='LICENSE.txt',
     description='Sentence tagger for biomedical abstracts.',
     long_description=open('README.txt').read(),
