@@ -43,6 +43,8 @@ def load_config(path=None):
   atexit.register(cleanup)
 
   # Process configured options
+  hydrat_config.set('parameters','parallel_classify', 'False')
+  hydrat_config.set('parameters','parallel_tokenize', 'False')
   hydrat_config.set('debug','allow_empty_instance', 'True')
   hydrat_config.set('debug','pdb_on_invalid_fm', 'False')
   hydrat_config.set('tools','treetagger', config.get('paths','treetagger'))
