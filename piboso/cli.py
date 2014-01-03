@@ -8,9 +8,6 @@ Marco Lui, March 2013
 import argparse, sys, os
 import csv
 
-
-
-from piboso.tokenize import induce
 from piboso.common import Timer
 from piboso.model import PIBOSOTagger
 from piboso.config import load_config, write_blank_config, DEFAULT_CONFIG_FILE
