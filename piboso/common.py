@@ -19,7 +19,7 @@ class Timer(object):
   def elapsed(self):
     now = self.timer()
     if self.end is not None:
-      self.end - self.start
+      return self.end - self.start
     else:
       return now - self.start
 
