@@ -31,7 +31,7 @@ def tokenize(ds, features, store_path):
   class_space = 'ebmcat'
 
   #print >>sys.stderr,  "=== opening store at {0} ===".format(store_path)
-  with closing(Store(store_path, 'a')) as store:
+  with closing(Store(store_path, 'a', recursive_close=False)) as store:
 
     #print >>sys.stderr,  "=== inducing features ({0}) ===".format(features)
     # Induce all the features for the new test data
@@ -62,20 +62,30 @@ def tokenize_extra(ds, store_path):
     proxy.tokenize(ext.bigram)
 
     proxy.tokenstream_name = 'treetaggerpos'
-    proxy.tokenize(ext.bigram)
     proxy.tokenize(ext.trigram)
-    
-def induce(chunk, store_path, features, spaces):
-  """
-  Induce features for a list of abstracts.
 
-  @param chunk list of abstracts (as open files) to process
-  """
+  # Hackish workaround for store being unexpectedly closed
+  with closing(Store(store_path, 'a', recursive_close=False)) as store:
+    proxy = DataProxy(ds, store=store)
+
+    proxy.tokenstream_name = 'treetaggerpos'
+    proxy.tokenize(ext.bigram)
+    
+
+def chunk2ts(chunk):
   ts = {}
   for f in chunk:
     for i, line in enumerate(f.readlines()):
       docid = "{0}-{1}".format(f.name, i+1)
       ts[docid] = line
+  return ts
+
+def induce(ts, store_path, features, spaces):
+  """
+  Induce features for a list of abstracts.
+
+  @param ts TokenStream (mapping from id to line)
+  """
   ds = NewDocuments(ts)
 
   # Merge feature spaces into the store
